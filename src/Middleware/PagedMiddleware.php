@@ -61,11 +61,6 @@ class PagedMiddleware implements MiddlewareInterface
         $this->descriptor = $descriptor;
     }
 
-    /**
-     * @param Call $call
-     * @param array $options
-     * @return PromiseInterface|ClientStream|ServerStream|BidiStream
-     */
     public function __invoke(Call $call, array $options)
     {
         $next = $this->nextHandler;

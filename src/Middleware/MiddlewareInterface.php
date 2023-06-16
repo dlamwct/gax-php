@@ -34,6 +34,9 @@ namespace Google\ApiCore\Middleware;
 
 use Google\ApiCore\Call;
 use GuzzleHttp\Promise\PromiseInterface;
+use Google\ApiCore\ClientStream;
+use Google\ApiCore\ServerStream;
+use Google\ApiCore\BidiStream;
 
 interface MiddlewareInterface
 {

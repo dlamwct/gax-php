@@ -65,7 +65,7 @@ class RetryMiddleware implements MiddlewareInterface
      * @param Call $call
      * @param array $options
      *
-     * @return PromiseInterface|ClientStream|ServerStream|BidiStream
+     * @return PromiseInterface
      */
     public function __invoke(Call $call, array $options)
     {
