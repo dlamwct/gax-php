@@ -34,11 +34,12 @@ namespace Google\ApiCore\Middleware;
 use Google\ApiCore\Call;
 use Google\ApiCore\OperationResponse;
 use Google\Protobuf\Internal\Message;
+use GuzzleHttp\Promise\PromiseInterface;
 
 /**
  * Middleware which wraps the response in an OperationResponse object.
  */
-class OperationsMiddleware
+class OperationsMiddleware implements MiddlewareInterface
 {
     /** @var callable */
     private $nextHandler;
@@ -59,6 +60,11 @@ class OperationsMiddleware
         $this->descriptor = $descriptor;
     }
 
+    /**
+     * @param Call $call
+     * @param array $options
+     * @return PromiseInterface|ClientStream|ServerStream|BidiStream
+     */
     public function __invoke(Call $call, array $options)
     {
         $next = $this->nextHandler;

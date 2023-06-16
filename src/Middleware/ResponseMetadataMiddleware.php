@@ -38,7 +38,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 /**
  * Middleware which transforms $response into [$response, $metadata]
  */
-class ResponseMetadataMiddleware
+class ResponseMetadataMiddleware implements MiddlewareInterface
 {
     /** @var callable */
     private $nextHandler;
@@ -51,6 +51,11 @@ class ResponseMetadataMiddleware
         $this->nextHandler = $nextHandler;
     }
 
+    /**
+     * @param Call $call
+     * @param array $options
+     * @return PromiseInterface|ClientStream|ServerStream|BidiStream
+     */
     public function __invoke(Call $call, array $options)
     {
         $metadataReceiver = new Promise();

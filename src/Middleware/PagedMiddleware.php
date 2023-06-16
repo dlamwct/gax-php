@@ -36,11 +36,12 @@ use Google\ApiCore\Page;
 use Google\ApiCore\PagedListResponse;
 use Google\ApiCore\PageStreamingDescriptor;
 use Google\Protobuf\Internal\Message;
+use GuzzleHttp\Promise\PromiseInterface;
 
 /**
 * Middleware which wraps the response in an PagedListResponses object.
 */
-class PagedMiddleware
+class PagedMiddleware implements MiddlewareInterface
 {
     /** @var callable */
     private $nextHandler;
@@ -60,6 +61,11 @@ class PagedMiddleware
         $this->descriptor = $descriptor;
     }
 
+    /**
+     * @param Call $call
+     * @param array $options
+     * @return PromiseInterface|ClientStream|ServerStream|BidiStream
+     */
     public function __invoke(Call $call, array $options)
     {
         $next = $this->nextHandler;

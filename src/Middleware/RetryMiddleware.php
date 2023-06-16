@@ -40,7 +40,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 /**
  * Middleware that adds retry functionality.
  */
-class RetryMiddleware
+class RetryMiddleware implements MiddlewareInterface
 {
     /** @var callable */
     private $nextHandler;
@@ -65,7 +65,7 @@ class RetryMiddleware
      * @param Call $call
      * @param array $options
      *
-     * @return PromiseInterface
+     * @return PromiseInterface|ClientStream|ServerStream|BidiStream
      */
     public function __invoke(Call $call, array $options)
     {

@@ -33,11 +33,12 @@
 namespace Google\ApiCore\Middleware;
 
 use Google\ApiCore\Call;
+use GuzzleHttp\Promise\PromiseInterface;
 
 /**
  * Middleware to add fixed headers to an API call.
  */
-class FixedHeaderMiddleware
+class FixedHeaderMiddleware implements MiddlewareInterface
 {
     /** @var callable */
     private $nextHandler;
@@ -55,6 +56,11 @@ class FixedHeaderMiddleware
         $this->overrideUserHeaders = $overrideUserHeaders;
     }
 
+    /**
+     * @param Call $call
+     * @param array $options
+     * @return PromiseInterface|ClientStream|ServerStream|BidiStream
+     */
     public function __invoke(Call $call, array $options)
     {
         $userHeaders = $options['headers'] ?? [];
