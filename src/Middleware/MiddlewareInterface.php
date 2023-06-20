@@ -47,8 +47,8 @@ use Google\ApiCore\BidiStream;
 interface MiddlewareInterface
 {
     /**
-     * Modify or observe the request and response parameters.
-     * The returned value should be the result of the next middleware in the
+     * Modify or observe the API call request and response.
+     * The returned value must include the result of the next MiddlewareInterface invocation in the
      * chain.
      *
      * @param Call $call
