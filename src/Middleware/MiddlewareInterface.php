@@ -39,10 +39,11 @@ use Google\ApiCore\ServerStream;
 use Google\ApiCore\BidiStream;
 
 /**
- * Middlewares should take a MiddlewareInterface as a constructor argument
- * {@see Google\ApiCore\Middleware\ResponseMetadataMiddleware} which represents
- * the next middleware in the chain. This will be invoked as part of this
- * middleware's invoke method, and the result returned.
+ * Middlewares must take a MiddlewareInterface as their first constructor
+ * argument {@see Google\ApiCore\Middleware\ResponseMetadataMiddleware}, which
+ * represents the next middleware in the chain. This next middleware MUST be
+ * invoked by this MiddlewareInterface, and the result must be returned as part
+ * of the `__invoke` method implementation.
  */
 interface MiddlewareInterface
 {
