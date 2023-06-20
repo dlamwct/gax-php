@@ -38,9 +38,19 @@ use Google\ApiCore\ClientStream;
 use Google\ApiCore\ServerStream;
 use Google\ApiCore\BidiStream;
 
+/**
+ * Middlewares should take a MiddlewareInterface as a constructor argument
+ * {@see Google\ApiCore\Middleware\ResponseMetadataMiddleware} which represents
+ * the next middleware in the chain. This will be invoked as part of this
+ * middleware's invoke method, and the result returned.
+ */
 interface MiddlewareInterface
 {
     /**
+     * Modify or observe the request and response parameters.
+     * The returned value should be the result of the next middleware in the
+     * chain.
+     *
      * @param Call $call
      * @param array $options
      * @return PromiseInterface|ClientStream|ServerStream|BidiStream
