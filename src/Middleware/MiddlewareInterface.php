@@ -47,10 +47,11 @@ use Google\ApiCore\BidiStream;
  *
  * To create your own middleware, first implement the interface, as well as pass the handler
  * in through the constructor:
+ *
  * ```
  * use Google\ApiCore\Call;
  * use Google\ApiCore\Middleware\MiddlewareInterface;
- * 
+ *
  * class MyTestMiddleware implements MiddlewareInterface
  * {
  *     public function __construct(MiddlewareInterface $handler)
@@ -59,18 +60,19 @@ use Google\ApiCore\BidiStream;
  *      }
  *      public function __invoke(Call $call, array $options)
  *      {
- *         echo "Logging info about the call: " . $call->getMethod();
+ *          echo "Logging info about the call: " . $call->getMethod();
  *          return ($this->handler)($call, $options);
  *      }
  * }
  * ```
- * Next, add the middleware to any class implementing `GapicClientTrait` by passing in a 
+ *
+ * Next, add the middleware to any class implementing `GapicClientTrait` by passing in a
  * callable which returns the new middleware:
- * 
+ *
  * ```
  * $client = new ExampleGoogleApiServiceClient();
  * $client->addMiddleware(function (MiddlewareInterface $handler) {
- *     return new MytestMiddleware($handler);
+ *     return new MyTestMiddleware($handler);
  * });
  * ```
  */
