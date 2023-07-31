@@ -875,7 +875,7 @@ class GapicClientTraitTest extends TestCase
         }
         $expectedProperties = [
             'serviceName' => 'test.interface.v1.api',
-            'agentHeader' => AgentHeader::buildAgentHeader([]),
+            'agentHeader' => AgentHeader::buildAgentHeader([]) + ['User-Agent' => ['gcloud-php-legacy/']],
             'retrySettings' => $expectedRetrySettings,
         ];
         return [
@@ -1359,7 +1359,8 @@ class GapicClientTraitTest extends TestCase
                 $this->isInstanceOf(Call::class),
                 $this->equalTo([
                     'headers' => AgentHeader::buildAgentHeader([]) + [
-                        'X-Goog-User-Project' => [$quotaProject]
+                        'X-Goog-User-Project' => [$quotaProject],
+                        'User-Agent' => ['gcloud-php-legacy/']
                     ],
                     'credentialsWrapper' => $credentialsWrapper
                 ])
@@ -1392,6 +1393,16 @@ class GapicClientTraitTest extends TestCase
         // verify scopes are not set by default
         $defaultOptions = $client->call('buildClientOptions', [[]]);
         $this->assertArrayNotHasKey('scopes', $defaultOptions['credentialsConfig']);
+
+        // verify scopes are set when a custom api endpoint is used
+        $defaultOptions = $client->call('buildClientOptions', [[
+            'apiEndpoint' => 'www.someotherendpoint.com',
+        ]]);
+        $this->assertArrayHasKey('scopes', $defaultOptions['credentialsConfig']);
+        $this->assertEquals(
+            $client::$serviceScopes,
+            $defaultOptions['credentialsConfig']['scopes']
+        );
 
         // verify user-defined scopes override default scopes
         $defaultOptions = $client->call('buildClientOptions', [[
@@ -1810,6 +1821,25 @@ class GapicClientTraitTest extends TestCase
         $this->assertTrue($m1Called);
         $this->assertTrue($m2Called);
     }
+
+    public function testSurfaceAgentHeaders()
+    {
+        // V1 does not contain new headers
+        $client = new GapicClientTraitRestOnly([
+            'gapicVersion' => '0.0.2',
+        ]);
+        $agentHeader = $client->getAgentHeader();
+        $this->assertStringContainsString(' gapic/0.0.2 ', $agentHeader['x-goog-api-client'][0]);
+        $this->assertEquals('gcloud-php-legacy/0.0.2', $agentHeader['User-Agent'][0]);
+
+        // V2 contains new headers
+        $client = new GapicV2SurfaceClient([
+            'gapicVersion' => '0.0.1',
+        ]);
+        $agentHeader = $client->getAgentHeader();
+        $this->assertStringContainsString(' gapic/0.0.1 ', $agentHeader['x-goog-api-client'][0]);
+        $this->assertEquals('gcloud-php-new/0.0.1', $agentHeader['User-Agent'][0]);
+    }
 }
 
 class GapicClientTraitStub
@@ -1976,6 +2006,11 @@ class GapicClientTraitRestOnly
     {
         return 'rest';
     }
+
+    public function getAgentHeader()
+    {
+        return $this->agentHeader;
+    }
 }
 
 class GapicClientTraitOperationsStub extends GapicClientTraitStub
@@ -1993,4 +2028,39 @@ class CustomOperationsClient
     public function getOperation($name, $arg1, $arg2)
     {
     }
+}
+
+class GapicV2SurfaceBaseClient
+{
+    use GapicClientTrait;
+
+    public function __construct(array $options = [])
+    {
+        $clientOptions = $this->buildClientOptions($options);
+        $this->setClientOptions($clientOptions);
+    }
+
+    public static function getClientDefaults()
+    {
+        return [
+            'apiEndpoint' => 'test.address.com:443',
+            'serviceName' => 'test.interface.v1.api',
+            'clientConfig' => __DIR__ . '/testdata/test_service_client_config.json',
+            'descriptorsConfigPath' => __DIR__.'/testdata/test_service_descriptor_config.php',
+            'transportConfig' => [
+                'rest' => [
+                    'restClientConfigPath' => __DIR__.'/testdata/test_service_rest_client_config.php',
+                ]
+            ],
+        ];
+    }
+
+    public function getAgentHeader()
+    {
+        return $this->agentHeader;
+    }
+}
+
+class GapicV2SurfaceClient extends GapicV2SurfaceBaseClient
+{
 }
