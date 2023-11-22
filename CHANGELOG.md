@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.1](https://github.com/googleapis/gax-php/compare/v1.25.0...v1.25.1) (2023-11-22)
+
+
+### Bug Fixes
+
+* Ensure credentialsFetcher is nullable ([#503](https://github.com/googleapis/gax-php/issues/503)) ([0aeadbd](https://github.com/googleapis/gax-php/commit/0aeadbd6c55b3b93b40e128c347f64f4fbf8cffd))
+
 ## [1.25.0](https://github.com/googleapis/gax-php/compare/v1.24.0...v1.25.0) (2023-11-02)
 
 
