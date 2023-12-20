@@ -180,7 +180,7 @@ class RetryMiddleware
     private function getRetryFunction()
     {
         return $this->retrySettings->getRetryFunction() ??
-            function (\Exception $e, array $options): bool {
+            function (\Error|\Exception $e, array $options): bool {
                 // This is the default retry behaviour, i.e. we don't retry an ApiException
                 // and for other exception types, we only retry when the error code is in
                 // the list of retryable error codes.

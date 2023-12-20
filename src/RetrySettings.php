@@ -263,7 +263,7 @@ class RetrySettings
      *                    Defaults to the value of the DEFAULT_MAX_RETRIES constant.
      *                    This option is experimental.
      *     @type callable $retryFunction This function will be used to decide if we should retry or not.
-     *                    Callable signature: `function (Exception $e, array $options): bool`
+     *                    Callable signature: `function (Error|Exception $e, array $options): bool`
      *                    This option is experimental.
      * }
      */

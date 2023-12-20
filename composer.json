@@ -6,7 +6,7 @@
     "homepage": "https://github.com/googleapis/gax-php",
     "license": "BSD-3-Clause",
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.0",
         "google/auth": "^1.25.0",
         "google/grpc-gcp": "^0.2||^0.3",
         "grpc/grpc": "^1.13",
